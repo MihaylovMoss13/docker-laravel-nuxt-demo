@@ -4,7 +4,7 @@ default-character-set   = utf8mb4
 
 
 [mysqld]
-user                    = mysql
+user                    = root
 port                    = 3306
 sql_mode                = ""
 
@@ -23,7 +23,7 @@ long_query_time         = 3
 slow-query-log-file     = /var/lib/mysql/mysql.slow.log
 log-error               = /var/lib/mysql/mysql.error.log
 
-default-time-zone       = '+8:00'
+default-time-zone       = '+3:00'
 
 [mysql]
 default-character-set   = utf8mb4
