@@ -44,6 +44,8 @@ services:
     restart: always
     # cap_add:
     #   - ALL
+    depends_on:
+      - db
     networks:
       - app
 
@@ -52,16 +54,15 @@ services:
     image: mysql
     container_name: db
     restart: always
-    ports:
-      - "${MYSQL_HOST_PORT}:3306"
+    env_file:
+      - mysql.env
     volumes:
       - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
       - ${MYSQL_DATA}:/var/lib/mysql/:rw
+    ports:
+      - "${MYSQL_HOST_PORT}:3306"
     networks:
       - app
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      TZ: $TZ
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -71,11 +72,14 @@ services:
       - db
     ports:
       - 8080:80
+    networks:
+      - app
+    depends_on:
+      - db
     environment:
-      MYSQL_USERNAME: root
-      MYSQL_ROOT_PASSWORD: root
-      PMA_ARBITRARY: 1
-      PMA_HOST: db
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 
   # adminer:
   #   image: adminer
