@@ -1,6 +1,9 @@
-
 export default {
-  mode: 'universal',
+  // Target: https://go.nuxtjs.dev/config-target
+  target: "static",
+  colorMode: {
+    classSuffix: "",
+  },
   env: {
     BAIDU_ANALYTICS_KEY: '',
     GOOGLE_ANALYTICS_KEY: '',
@@ -9,115 +12,84 @@ export default {
     port: 3000, // default: 3000
     host: '0.0.0.0' // default: localhost,
   },
-  /*
-  ** Headers of the page
-  */
+
+  // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Kenbucket',
+    title: "Институт Косметологии",
+    htmlAttrs: {
+      lang: "ru",
+    },
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { charset: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { hid: "description", name: "description", content: "" },
+      { name: "format-detection", content: "telephone=no" },
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.png" }],
   },
-  /*
-  ** Customize the progress-bar color
-  */
-  loading: { color: '#fff' },
-  // loading: '~/components/loading.vue',
-  /*
-  ** Global CSS
-  */
-  css: [
-    '~/assets/styles/main.scss'
-  ],
-  // styleResources: {
-  //   scss: ['~/assets/styles/main.scss']
-  // },
-  /*
-  ** Plugins to load before mounting the App
-  */
+
+  // Global CSS: https://go.nuxtjs.dev/config-css
+  css: ["~/assets/app.css"],
+
+  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/axios',
-    '~/plugins/font-awesome',
-    '~/plugins/filters',
-    '~/plugins/kenbucket',
-    { src: '~/plugins/infinite-scroll', ssr: false },
-    { src: '~/plugins/lazyload', ssr: false },
-    { src: '~/plugins/ga-baidu', ssr: false },
-    { src: '~/plugins/ga-google', ssr: false },
+    // "~/plugins/back-to-top.js"
   ],
-  /*
-  ** Nuxt.js dev-modules
-  */
+
+  // Auto import components: https://go.nuxtjs.dev/config-components
+  components: true,
+
+  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    // https://go.nuxtjs.dev/tailwindcss
+    "@nuxtjs/tailwindcss",
+    "@nuxtjs/color-mode",
   ],
-  /*
-  ** Nuxt.js modules
-  */
+
+  // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // Doc: https://github.com/nuxt-community/modules/tree/master/packages/bulma
-
-    'nuxt-buefy',
-    '@nuxtjs/style-resources',
-    'nuxt-fontawesome',
     '@nuxtjs/axios',
-    '@nuxtjs/toast',
-    ['cookie-universal-nuxt', { alias: 'cookies' }],
+    '@nuxtjs/auth-next'
   ],
 
-  /*
-  ** Axios module configuration
-  ** See https://axios.nuxtjs.org/options
-  */
-  axios: {
-    baseURL: 'http://nginx:80/',
-    proxy: true,
-    debug: false
-  },
-  // proxy: {
-  //   '/api': {
-  //     target: 'http://localhost:80',
-  //     changeOrigin: true
-  //   },
-  // },
-  // Doc: https://github.com/shakee93/vue-toasted
-  // Doc: https://github.com/nuxt-community/modules/tree/master/packages/toast
-  toast: {
-    position: 'top-right',
-    duration: 2000, // Display time of the toast in millisecond
-    keepOnHover: true // When mouse is over a toast's element, the corresponding duration timer is paused until the cursor leaves the element
-  },
-  
-  /*
-  ** FontAwesome module configuration 配置FontAwesome
-  */
-  fontawesome: {
-    // See https://github.com/vaso2/nuxt-fontawesome
-    // 这里设置了组建的标签为fa
-    // 如果不设置，则默认为在font-awesome.js中，生成的：font-awesome-icon
-    component: 'fa',
-    imports: [
-      {
-        set: '@fortawesome/free-solid-svg-icons',
-        icons: ['fas']
+  auth: {
+      strategies: {
+          cookie: {
+              endpoints: {
+                  csrf: {
+                      url: '/sanctum/csrf-cookie'
+                  },
+                  login: {
+                      url: '/login'
+                  },
+                  logout: {
+                      url: '/logout'
+                  },
+                  user: {
+                      url: '/user'
+                  }
+              },
+              user: {
+                  property: 'data'
+              },
+          }
       },
-      {
-        set: '@fortawesome/free-regular-svg-icons',
-        icons: ['far']
+
+      redirect: {
+          login: '/login',
+          logout: '/login',
+          home: '/'
       },
-      {
-        set: '@fortawesome/free-brands-svg-icons',
-        icons: ['fab']
-      }
-    ]
+
+      plugins: ['~/plugins/axios'],
   },
 
-  /*
-  ** Build configuration
-  */
+  axios: {
+      baseURL: 'http://localhost',
+      credentials: true,
+  },
+
+  // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     postcss: {
       preset: {
@@ -129,14 +101,6 @@ export default {
     /*
     ** You can extend webpack config here
     */
-    extend(config, ctx) {
-    }
+    extend(config, ctx) {}
   },
-
-  // 
-  // watchers: {
-  //   webpack: {
-  //     poll: true
-  //   }
-  // }
-}
+};
