@@ -1,8 +1,9 @@
 export default {
   // Target: https://go.nuxtjs.dev/config-target
-  target: "static",
+  // target: "static",
+  mode: 'universal',
   colorMode: {
-    classSuffix: "",
+    classSuffix: "dark",
   },
   env: {
     BAIDU_ANALYTICS_KEY: '',
