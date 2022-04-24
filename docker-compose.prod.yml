@@ -1,0 +1,131 @@
+version: "3"
+services:
+  nginx:
+    image: nginx:${NGINX_VERSION}
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+      - "9527:9527"
+    privileged: true
+    volumes:
+      - ${WORK_DIR_FROM}:${WORK_DIR_TO}:rw
+      - ${NGINX_SSL_CERTIFICATE_DIR}:/etc/nginx/ssl:rw
+      - ${NGINX_CONFD_DIR}:/etc/nginx/conf.d/:rw
+      - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:ro
+      - ${NGINX_FASTCGI_PHP_CONF}:/etc/nginx/fastcgi-php.conf:ro
+      - ${NGINX_FASTCGI_PARAMS}:/etc/nginx/fastcgi_params:ro
+      - ${NGINX_LOG_DIR}:/var/log/nginx/:rw
+    depends_on:
+      - php
+      - node
+    environment:
+      TZ: "$TZ"
+    restart: always
+    networks:
+      - app
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    restart: unless-stopped
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  php:
+    build:
+      context: ./php
+      args:
+        PHP_VERSION: ${PHP_VERSION}
+        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
+        PHP_EXTENSIONS: ${PHP_EXTENSIONS}
+        TZ: "$TZ"
+    privileged: true
+    container_name: php
+    volumes:
+      - ${WORK_DIR_FROM}:${WORK_DIR_TO}:rw
+      - ${PHP_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro
+      - ${PHP_FPM_CONF_FILE}:/usr/local/etc/php-fpm.d/www.conf:rw
+      - ${PHP_LOG_DIR}:/var/log/php
+      - ${PHP_COMPOSER_DATA}:/tmp/composer
+    restart: always
+    # cap_add:
+    #   - ALL
+    depends_on:
+      - db
+    networks:
+      - app
+
+  db:
+    image: mysql
+    container_name: db
+    restart: always
+    env_file:
+      - mysql.env
+    volumes:
+      - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
+      - ${MYSQL_DATA}:/var/lib/mysql/:rw
+    ports:
+      - "${MYSQL_HOST_PORT}:3306"
+    networks:
+      - app
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    links:
+      - db
+    ports:
+      - 8080:80
+    networks:
+      - app
+    depends_on:
+      - db
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+
+  # adminer:
+  #   image: adminer
+  #   container_name: adminer
+  #   restart: always
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - app
+
+  redis:
+   image: redis:${REDIS_VERSION}
+   container_name: redis
+   ports:
+     - "${REDIS_HOST_PORT}:6379"
+   volumes:
+     - ${REDIS_CONF_FILE}:/etc/redis.conf:ro
+     - ${REDIS_DATA}:/data/:rw
+   restart: always
+   entrypoint: ["redis-server", "/etc/redis.conf"]
+   environment:
+     TZ: "$TZ"
+   networks:
+     - app
+
+  node:
+    image: node:${NODE_VERSION}
+    container_name: node
+    working_dir: ${WORK_DIR_TO}
+    stdin_open: true
+    tty: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ${WORK_DIR_FROM}:${WORK_DIR_TO}:rw
+    networks:
+      - app
+
+networks:
+  app:
+    driver: bridge
