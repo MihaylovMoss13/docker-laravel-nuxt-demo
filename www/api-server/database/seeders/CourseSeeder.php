@@ -31,7 +31,7 @@ class CourseSeeder extends Seeder
                 'program_pdf'   => '',
                 'contract_url'  => '',
                 'limit_users'   => '',
-                'type'          => 'Оффлайн',
+                'type'          => 'Очное обучение',
             ],
             [
                 'title'         => 'Косметолог эстетист (без мед. образования) 144 акк. часов',
@@ -49,7 +49,7 @@ class CourseSeeder extends Seeder
                 'program_pdf'   => '',
                 'contract_url'  => '',
                 'limit_users'   => '',
-                'type'          => 'Оффлайн',
+                'type'          => 'Очное обучение',
             ],
             [
                 'title'         => 'Сестринское дело 288 акк. часов',
@@ -67,7 +67,7 @@ class CourseSeeder extends Seeder
                 'program_pdf'   => '',
                 'contract_url'  => '',
                 'limit_users'   => '',
-                'type'          => 'Оффлайн',
+                'type'          => 'Очное обучение',
             ],
             [
                 'title'         => 'Косметология 576 акк. часов',
@@ -85,7 +85,7 @@ class CourseSeeder extends Seeder
                 'program_pdf'   => '',
                 'contract_url'  => '',
                 'limit_users'   => '',
-                'type'          => 'Оффлайн',
+                'type'          => 'Очное обучение',
             ],
             [
                 'title'         => 'Курс младших мед. сестер 50 акк. часов',
@@ -103,7 +103,7 @@ class CourseSeeder extends Seeder
                 'program_pdf'   => '',
                 'contract_url'  => '',
                 'limit_users'   => '',
-                'type'          => 'Оффлайн',
+                'type'          => 'Очное обучение',
             ],
             [
                 'title'         => 'Сестринское дело 288 акк. часов',
@@ -121,7 +121,7 @@ class CourseSeeder extends Seeder
                 'program_pdf'   => '',
                 'contract_url'  => '',
                 'limit_users'   => '',
-                'type'          => 'Оффлайн',
+                'type'          => 'Очное обучение',
             ],
         ];
         
