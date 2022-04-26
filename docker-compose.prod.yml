@@ -54,40 +54,74 @@ services:
     # cap_add:
     #   - ALL
     depends_on:
-      - db
+      - mysql
     networks:
       - app
 
-  db:
-    image: mysql
-    container_name: db
-    restart: always
-    env_file:
-      - mysql.env
-    volumes:
-      - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
-      - ${MYSQL_DATA}:/var/lib/mysql/:rw
+  mysql:
+    container_name: mysql
+    image: 'mysql/mysql-server:8.0'
     ports:
-      - "${MYSQL_HOST_PORT}:3306"
+      - '${FORWARD_DB_PORT:-3306}:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_USER: '${DB_USERNAME}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    volumes:
+      - '${MYSQL_DATA}:/var/lib/mysql'
     networks:
       - app
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
+      retries: 3
+      timeout: 5s
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
+    image: phpmyadmin
     restart: always
-    links:
-      - db
     ports:
       - 8080:80
-    networks:
-      - app
-    depends_on:
-      - db
     environment:
       - PMA_ARBITRARY=1
-      - PMA_HOST=db
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    depends_on:
+      - mysql
+    networks:
+      - app
+
+  # db:
+  #   image: mysql
+  #   container_name: db
+  #   restart: always
+  #   env_file:
+  #     - mysql.env
+  #   volumes:
+  #     - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
+  #     - ${MYSQL_DATA}:/var/lib/mysql/:rw
+  #   ports:
+  #     - "${MYSQL_HOST_PORT}:3306"
+  #   networks:
+  #     - app
+
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   container_name: phpmyadmin
+  #   restart: always
+  #   links:
+  #     - db
+  #   ports:
+  #     - 8080:80
+  #   networks:
+  #     - app
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     - PMA_ARBITRARY=1
+  #     - PMA_HOST=db
+  #     - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 
   # adminer:
   #   image: adminer
