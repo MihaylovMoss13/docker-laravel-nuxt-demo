@@ -63,7 +63,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::prefix('api')->group(function () {
-    Route::get('courses', [CourseController::class, index]);
+    Route::get('courses', [CourseController::class, 'index']);
 });
 
 Route::apiResources([
