@@ -4,7 +4,7 @@
 */
 
 /* Fonts */
-/* @font-face {
+@font-face {
   font-family: "Montserrat-Extralight";
   src: url("./fonts/Montserrat/Montserrat-Extralight.eot") format("eot"),
     url("./fonts/Montserrat/Montserrat-Extralight.woff") format("woff"),
@@ -16,9 +16,9 @@
 
 .font-general-extralight {
   font-family: "Montserrat-Extralight";
-} */
+}
 
-/* @font-face {
+@font-face {
   font-family: "Montserrat-ExtralightItalic";
   src: url("./fonts/Montserrat/Montserrat-ExtralightItalic.eot") format("eot"),
     url("./fonts/Montserrat/Montserrat-ExtralightItalic.woff") format("woff"),
@@ -176,7 +176,16 @@ body {
 
 .font-general-bold-italic {
   font-family: "Montserrat-BoldItalic";
-} */
+}
+
+p {
+  line-height: 16px;
+  margin-bottom: 10px;
+}
+
+h2 {
+  margin-top: 15px;
+}
 
 ul {
   margin-left: 32px;
