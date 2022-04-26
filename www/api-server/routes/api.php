@@ -1,95 +1,70 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
- */
+use App\Http\Controllers\{LoginController,
+    LogoutController,
+    RegisterController,
+    TagController,
+    OfficeController,
+    OfficeImageController,
+    UserController,
+    UserReservationController,
+    HostReservationController};
 
-Route::prefix('api')->group(function () {
-    Route::prefix('b1')->group(function () {
-        Route::group(['namespace' => 'Admin'], function () {
-            Route::post('auth/login', 'AuthController@login');
-// 统计
-Route::get('stats', 'StatController@index');
-            // 后台用户
-            Route::group(['middleware' => ['jwt.role:admin']], function () {
-                Route::get('auth/user', 'AuthController@user');
-                Route::post('auth/logout', 'AuthController@logout');
+use App\Http\Controllers\Api\{
+    CategoryController,
+    CourseController,
+    LeadController,
+    TrainingScheduleController
+};
 
-                // 后台用户且拥有相应权限
-                Route::group(['middleware' => ['permission.admin']], function () {
+use App\Http\Resources\{
+    CourseResource,
+    LeadResource,
+    OfficeResource,
+    TrainingResource
+};
 
-                    Route::put('auth/user', 'AuthController@updateUser');
+// Auth ...
+Route::post('/login', LoginController::class);
+Route::post('/register', RegisterController::class);
+Route::post('/logout', LogoutController::class);
 
-                    
+// Tags...
+Route::get('/tags', TagController::class);
 
-                    // 图片上传
-                    Route::post('images', 'ImageController@store');
+// User ...
+Route::get('/user', UserController::class)->middleware(['auth:sanctum']);
 
-                    // 后台用户管理
-                    Route::get('admins', 'UserController@index');
-                    Route::post('admins', 'UserController@store');
-                    Route::get('admins/{id}', 'UserController@show');
-                    Route::put('admins/{id}', 'UserController@update');
-                    Route::delete('admins/{id}', 'UserController@destroy');
-                    Route::put('admins/{id}/password', 'UserController@resetPassword');
-                    Route::put('admins/{id}/role', 'UserController@resetRole');
+// Offices...
+Route::get('/offices', [OfficeController::class, 'index']);
+Route::get('/offices/{office}', [OfficeController::class, 'show']);
+Route::post('/offices', [OfficeController::class, 'create'])->middleware(['auth:sanctum', 'verified']);
+Route::put('/offices/{office}', [OfficeController::class, 'update'])->middleware(['auth:sanctum', 'verified']);
+Route::delete('/offices/{office}', [OfficeController::class, 'delete'])->middleware(['auth:sanctum', 'verified']);
 
-                    // 后台角色管理
-                    Route::get('roles', 'RoleController@index');
-                    Route::post('roles', 'RoleController@store');
-                    Route::get('roles/{id}', 'RoleController@show');
-                    Route::put('roles/{id}', 'RoleController@update');
-                    Route::delete('roles/{id}', 'RoleController@destroy');
-                    Route::get('roles/{id}/accesses', 'RoleController@getAccesses');
+// Office Photos...
+Route::post('/offices/{office}/images', [OfficeImageController::class, 'store'])->middleware(['auth:sanctum', 'verified']);
+Route::delete('/offices/{office}/images/{image:id}', [OfficeImageController::class, 'delete'])->middleware(['auth:sanctum', 'verified']);
 
-                    // 后台路由规则管理
-                    Route::get('accesses', 'AccessController@index');
-                    Route::post('accesses', 'AccessController@store');
-                    Route::get('accesses/{id}', 'AccessController@show');
-                    Route::put('accesses/{id}', 'AccessController@update');
-                    Route::delete('accesses/{id}', 'AccessController@destroy');
+// User Reservations...
+Route::get('/reservations', [UserReservationController::class, 'index'])->middleware(['auth:sanctum', 'verified']);
+Route::post('/reservations', [UserReservationController::class, 'create'])->middleware(['auth:sanctum', 'verified']);
+Route::delete('/reservations/{reservation}', [UserReservationController::class, 'cancel'])->middleware(['auth:sanctum', 'verified']);
 
-                    // 文章管理
-                    Route::get('articles', 'ArticleController@index');
-                    Route::post('articles', 'ArticleController@store');
-                    Route::get('articles/{id}', 'ArticleController@show');
-                    Route::put('articles/{id}', 'ArticleController@update');
-                    Route::delete('articles/{id}', 'ArticleController@destroy');
+// Host Reservations...
+Route::get('/host/reservations', [HostReservationController::class, 'index']);
 
-                    // 文章分类管理
-                    Route::get('categories', 'CategoryController@index');
-                    Route::post('categories', 'CategoryController@store');
-                    // Route::get('categories/{id}', 'CategoryController@show');
-                    Route::put('categories/{id}', 'CategoryController@update');
-                    Route::delete('categories/{id}', 'CategoryController@destroy');
-
-                    // 文章评论管理
-                    Route::get('comments', 'ArticleCommentController@index');
-                    Route::post('comments', 'ArticleCommentController@store');
-
-                });
-            });
-
-        });
-    });
-
-    Route::prefix('f1')->group(function () {
-        Route::group(['namespace' => 'Common'], function () {
-            Route::get('articles', 'ArticleController@index');
-            Route::get('articles/{uuid}', 'ArticleController@show');
-            Route::get('articles/{uuid}/comments', 'ArticleCommentController@index');
-            Route::post('articles/{uuid}/comments', 'ArticleCommentController@store');
-            Route::get('categories', 'CategoryController@index');
-            Route::get('stats', 'StatController@index');
-        });
-    });
+// Auth sanctum
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+    return $request->user();
 });
+    
+Route::apiResources([
+    // 'home'               => HomeController::class,
+    'courses'            => CourseController::class,
+    'leads'              => LeadController::class,
+    'training_schedules' => TrainingScheduleController::class
+]);
