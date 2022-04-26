@@ -27,6 +27,7 @@ export default {
       { name: "format-detection", content: "telephone=no" },
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.png" }],
+    script: [{hid: 'jivosite', src: '//code.jivo.ru/widget/vW0IPSeu4j'}]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css

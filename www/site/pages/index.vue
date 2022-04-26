@@ -216,6 +216,9 @@
                   >
                 </NuxtLink>
               </div>
+              <div class="mt-7 w-full">
+                <marquee direction="left" scrollamount="10" class="font-bold" style="font-size: 24px; color: red;">Идёт набор на Курс Колористики. Курс начинается с 16 мая! Записывайтесь по бесплатному номеру 8 (800) 333-29-55</marquee>
+              </div>
             </div>
           </div>
         </div>
