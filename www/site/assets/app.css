@@ -4,7 +4,7 @@
 */
 
 /* Fonts */
-@font-face {
+/* @font-face {
   font-family: "Montserrat-Extralight";
   src: url("./fonts/Montserrat/Montserrat-Extralight.eot") format("eot"),
     url("./fonts/Montserrat/Montserrat-Extralight.woff") format("woff"),
@@ -176,7 +176,7 @@ body {
 
 .font-general-bold-italic {
   font-family: "Montserrat-BoldItalic";
-}
+} */
 
 p {
   line-height: 16px;
