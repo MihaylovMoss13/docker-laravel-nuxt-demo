@@ -50,7 +50,8 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth-next',
+    '@nuxtjs/proxy'
   ],
 
   auth: {
@@ -86,8 +87,9 @@ export default {
   },
 
   axios: {
-      baseURL: 'http://localhost',
-      credentials: true,
+    baseURL: 'http://localhost',
+    credentials: true,
+    proxy: true
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -104,4 +106,8 @@ export default {
     */
     extend(config, ctx) {}
   },
+
+  proxy: {
+    '/api/': { target: 'http://cosmetic.school/', pathRewrite: {'^/api/': ''}, changeOrigin: true }
+  }  
 };
