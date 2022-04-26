@@ -61,7 +61,11 @@ Route::get('/host/reservations', [HostReservationController::class, 'index']);
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
-    
+
+Route::prefix('api')->group(function () {
+    Route::get('courses', [CourseController::class, index]);
+});
+
 Route::apiResources([
     // 'home'               => HomeController::class,
     'courses'            => CourseController::class,
