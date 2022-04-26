@@ -10,7 +10,7 @@ services:
     privileged: true
     volumes:
       - ${WORK_DIR_FROM}:${WORK_DIR_TO}:rw
-      - ${NGINX_SSL_CERTIFICATE_DIR}:/etc/nginx/ssl:rw
+      # - ${NGINX_SSL_CERTIFICATE_DIR}:/etc/nginx/ssl:rw
       - ${NGINX_CONFD_DIR}:/etc/nginx/conf.d/:rw
       - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:ro
       - ${NGINX_FASTCGI_PHP_CONF}:/etc/nginx/fastcgi-php.conf:ro
