@@ -23,9 +23,9 @@ class DatabaseSeeder extends Seeder
              'password' => Hash::make('asdasdasd')
          ]);
 
-         $office1 = Office::factory()->create();
-         $office2 = Office::factory()->create();
-         $office3 = Office::factory()->create();
+        // $office1 = Office::factory()->create();
+        // $office2 = Office::factory()->create();
+        // $office3 = Office::factory()->create();
 
         $office1->update([
             'featured_image_id' => $office1->images()->create([
@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
             ])->id
         ]);
 
-        Reservation::factory()->for($user)->for($office3)->create();
+        // Reservation::factory()->for($user)->for($office3)->create();
         
         $this->call([
             CategorySeeder::class,
