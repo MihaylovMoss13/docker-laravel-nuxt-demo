@@ -106,4 +106,8 @@ export default {
     */
     extend(config, ctx) {}
   },
+
+  proxy: {
+    '/api/': { target: 'http://cosmetic.school/', pathRewrite: {'^/api/': ''}, changeOrigin: true }
+  } 
 };
