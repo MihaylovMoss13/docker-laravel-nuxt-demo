@@ -1,3 +1,4 @@
 www/api-server/vendor/
+www/api-server/.env
 mysql/data
 data/certbot
