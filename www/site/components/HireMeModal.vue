@@ -7,10 +7,15 @@ export default {
   data: () => {
     return {
       // @todo
+      courses: [],
     };
   },
   mounted() {
     feather.replace();
+  },
+  async fetch() {
+    const courses = await this.$axios.$get('/api/courses')
+    this.courses = courses.data;
   },
   methods: {},
 };
@@ -172,11 +177,11 @@ export default {
                       aria-label="Выбор курса"
                     >
                       <option
-                        v-for="category in categories"
-                        :key="category.id"
-                        :value="category.value"
+                        v-for="course in courses"
+                        :key="course.id"
+                        :value="course.title"
                       >
-                        {{ category.name }}
+                        {{ course.title }}
                       </option>
                     </select>
                   </div>
