@@ -38,7 +38,7 @@ export default {
     feather.replace();
   },
   async fetch() {
-    const courses = await this.$axios.$get('/courses')
+    const courses = await this.$axios.$get('/api/courses')
     this.courses = courses.data;
   },
 };

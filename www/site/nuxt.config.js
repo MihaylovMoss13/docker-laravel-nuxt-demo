@@ -86,7 +86,7 @@ export default {
   },
 
   axios: {
-      baseURL: 'http://localhost/api',
+      baseURL: 'http://localhost',
       credentials: true,
   },
 
