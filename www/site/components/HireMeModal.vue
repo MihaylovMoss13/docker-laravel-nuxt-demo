@@ -2,12 +2,11 @@
 import feather from "feather-icons";
 import Button from "./reusable/Button.vue";
 export default {
-  props: ["showModal", "modal", "categories"],
+  props: ["showModal", "modal", "courses"],
   components: { Button },
   data: () => {
     return {
       // @todo
-      courses: [],
     };
   },
   mounted() {
