@@ -12,10 +12,6 @@ export default {
   mounted() {
     feather.replace();
   },
-  async fetch() {
-    const courses = await this.$axios.$get('/api/courses')
-    this.courses = courses.data;
-  },
   methods: {},
 };
 </script>
